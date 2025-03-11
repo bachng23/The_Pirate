@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static src.main.Game.GAME_HEIGHT;
+import static src.main.Game.GAME_WIDTH;
 import static src.utilz.Constants.PlayerConstants.*;
 import static src.utilz.Constants.Directions.*;
 
@@ -27,7 +29,7 @@ public class GamePanel extends JPanel {
     }
 
     private void setPanelSize() {
-        Dimension size = new Dimension(1280, 800);
+        Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
         setMinimumSize(size);
         setPreferredSize(size);
         setMaximumSize(size);

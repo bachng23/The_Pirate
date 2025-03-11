@@ -1,26 +1,23 @@
 package src.entities;
 
-import javax.imageio.ImageIO;
+import src.utilz.loadSave;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
-import static src.utilz.Constants.Directions.*;
-import static src.utilz.Constants.Directions.DOWN;
 import static src.utilz.Constants.PlayerConstants.*;
 
 public class Player extends Entity {
 
     private BufferedImage[][] animations;
-    private int aniTick, aniIndex, aniSpeed = 30;
+    private int aniTick, aniIndex, aniSpeed = 25;
     private int playerAction = IDLE;
     private boolean moving = false, attacking = false;
     private boolean left, right, up, down;
     private float playerSpeed = 2.0f;
 
-    public Player(float x, float y) {
-        super(x, y);
+    public Player(float x, float y, int width, int height) {
+        super(x, y, width, height);
         loadAnimations();
     }
 
@@ -33,7 +30,7 @@ public class Player extends Entity {
     }
 
     public void render(Graphics g) {
-        g.drawImage(animations[playerAction][aniIndex], (int)x, (int)y, 256, 160, null);
+        g.drawImage(animations[playerAction][aniIndex], (int)x, (int)y, width, height, null);
     }
 
 
@@ -101,23 +98,12 @@ public class Player extends Entity {
     }
 
     private void loadAnimations() {
-        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
-        try {
-            BufferedImage img = ImageIO.read(is);
+        BufferedImage img = loadSave.GetSpriteAtlas(loadSave.PLAYER_ATLAS);
 
-            animations = new BufferedImage[9][6];
-            for (int i = 0; i < animations.length; i++) {
-                for (int j = 0; j < animations[i].length; j++) {
-                    animations[i][j] = img.getSubimage(j * 64, i*40, 64, 40);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+        animations = new BufferedImage[9][6];
+        for (int i = 0; i < animations.length; i++) {
+            for (int j = 0; j < animations[i].length; j++) {
+                animations[i][j] = img.getSubimage(j * 64, i*40, 64, 40);
             }
         }
     }
