@@ -1,8 +1,8 @@
 package src.main;
 
-import src.entities.Player;
-import src.levels.levelManager;
-
+import src.gamestates.Gamestate;
+import src.gamestates.Playing;
+import src.gamestates.Menu;
 import java.awt.*;
 
 public class Game implements Runnable {
@@ -12,8 +12,8 @@ public class Game implements Runnable {
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
 
-    private Player player;
-    private levelManager levelManager;
+    private Playing playing;
+    private Menu menu;
 
     public final static int TILE_DEFAULT_SIZE = 32;
     public final static float SCALE = 1.5f;
@@ -33,8 +33,8 @@ public class Game implements Runnable {
     }
 
     private void initClasses() {
-        player = new Player(200, 200, (int) (64*SCALE), (int) (40*SCALE));
-        levelManager = new levelManager(this);
+        menu = new Menu(this);
+        playing = new Playing(this);
     }
 
     public void startGameLoop() {
@@ -44,13 +44,29 @@ public class Game implements Runnable {
     }
 
     public void update() {
-        player.update();
-        levelManager.update();
+        switch (Gamestate.state) {
+            case MENU:
+                menu.update();
+                break;
+            case PLAYING:
+                playing.update();
+                break;
+            default:
+                break;
+        }
     }
 
     public void render(Graphics g) {
-        player.render(g);
-        levelManager.draw(g);
+        switch (Gamestate.state) {
+            case MENU:
+                menu.draw(g);
+                break;
+            case PLAYING:
+                playing.draw(g);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -98,11 +114,17 @@ public class Game implements Runnable {
     }
 
     public void windowFocusLost() {
-        player.resetDirBooleans();
+        if(Gamestate.state == Gamestate.PLAYING) {
+            Playing.getPlayer().resetDirBooleans();
+        }
     }
 
-    public Player getPlayer() {
-        return player;
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Playing getPlaying() {
+        return playing;
     }
 
 }

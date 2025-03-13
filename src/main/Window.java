@@ -7,25 +7,40 @@ import java.awt.event.WindowFocusListener;
 public class Window extends JFrame {
 
     public Window(GamePanel gamePanel) {
-        JFrame window = new JFrame();
+        // Thiết lập tiêu đề cho cửa sổ (tùy chọn)
+        setTitle("Game Window");
 
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.add(gamePanel);
-        window.setLocationRelativeTo(null);
-        window.setResizable(false);
-        window.pack();
-        window.setVisible(true);
-        window.addWindowFocusListener(new WindowFocusListener() {
+        // Thiết lập hành động khi đóng cửa sổ
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Thêm game panel vào cửa sổ
+        add(gamePanel);
+
+        // Cố định kích thước cửa sổ
+        setResizable(false);
+
+        // Đặt kích thước cửa sổ vừa với các thành phần bên trong
+        pack();
+
+        // Đặt cửa sổ ở giữa màn hình
+        setLocationRelativeTo(null);
+
+        // Thêm listener để xử lý khi cửa sổ mất focus
+        addWindowFocusListener(new WindowFocusListener() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
-                gamePanel.getGame().windowFocusLost();
+                // Có vẻ như logic ở đây bị đảo ngược
+                // Thông thường, bạn sẽ gọi windowFocusLost khi cửa sổ mất focus
             }
 
             @Override
             public void windowLostFocus(WindowEvent e) {
-
+                gamePanel.getGame().windowFocusLost();
             }
         });
+
+        // Hiển thị cửa sổ
+        setVisible(true);
     }
 
 }
